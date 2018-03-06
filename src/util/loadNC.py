@@ -28,12 +28,12 @@ class LoadNC():
         """Constructor for LoadNC"""
     def readNc(self):
 
-        dataset=nc.Dataset("/home/drosero/Descargas/rrchirps.nc")
+        dataset=nc.Dataset("/home/darwin/Descargas/rrchirps.nc")
         #print("leyendo el netcdf\n imprimiendo el metadato")
-        #print(dataset.file_format)
-        #print(dataset.dimensions.keys())
+        print(dataset.file_format)
+        print(dataset.dimensions.keys())
         #print(dataset.dimensions['T'])
-        #print(dataset.variables.keys())
+        print(dataset.variables.keys())
         #print(dataset.variables['precipitation'])
         #print(dataset.variables)
         """longitud = X, latitud = Y Precipitacion = precipitation"""
@@ -50,14 +50,24 @@ class LoadNC():
         ##time serie
         fechas = pd.date_range(start="1981-01-01",periods=len(dataset.variables['T']),freq="MS")
         print(type(fechas),"  ",type(rr))
-
+        print("tipo de datos ", type(lon))
+        self.findCoor(lat,lon,lonp=78.17830278,latp=0.1783027778)
         self.getDataAsfile(rr, lat, lon)
         dataset.close();
 
 
-    def findCoor(self):
-        """Obtiene las cordenadas dentro del dataset NetCDF que sean las mas cooerentes """
-        pass
+    def findCoor(self,latnc, lonnc, latp, lonp):
+        """Retorna un serie de tiempo desde el netcdf dada un latitud y longitug"""
+        print(latp," ", lonp)
+        latncmx = np.where(latnc >= latp)
+        mx=len(latncmx[0])
+        latncb =[latnc[mx-1],latnc[mx],latnc[mx+1],latnc[mx+2]]
+        print("valores ",latncb)
+
+
+
+
+
 
     def getDataAsfile(self, varible, lat, lon):
 
@@ -85,9 +95,12 @@ class LoadNC():
         print(len(sLat),len(sLon))
         #data={"lon":sLon,"lat":sLat,"1981-01":v1,"1981-02":v2,"1981-03":v3,"1981-04":v4,"1981-05":v5}
         dataF=pd.DataFrame({"lon":sLon,"lat":sLat,"1981-01":v1,"1981-02":v2,"1981-03":v3,"1981-04":v4,"1981-05":v5})
-        dataF.to_csv("/home/drosero/Escritorio/chirps.csv",sep=";")
+        dataF.to_csv("/home/darwin/Escritorio/chirps.csv",sep=";")
         ##datos=pd.DataFrame(sLat,sLon,v1,v2,v3,v4,v5)
 
+
+lonp=78.17830278
+latp=0.1783027778
 
 lnc= LoadNC()
 lnc.readNc()
