@@ -66,6 +66,9 @@ class LoadNC():
         ncmx = np.where(lonnc <= lonp)
         mx = len(ncmx[0])
         lonncb = [lonnc[mx-1], lonnc[mx]]
+        # A CUAL CORDENADA ESTA MAS PROXIMO EL PUNTO
+        # ENTONCES  x >= lonnc
+        # y >= latnc
         print("longitudes ",lonncb)
 
 
