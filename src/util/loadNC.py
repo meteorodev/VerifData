@@ -51,7 +51,7 @@ class LoadNC():
         fechas = pd.date_range(start="1981-01-01",periods=len(dataset.variables['T']),freq="MS")
         print(type(fechas),"  ",type(rr))
         print("tipo de datos ", type(lon))
-        self.findCoor(lat,lon,lonp=78.17830278,latp=0.1783027778)
+        self.findCoor(lat,lon,lonp=-78.17830278,latp=0.1783027778)
         self.getDataAsfile(rr, lat, lon)
         dataset.close();
 
@@ -59,10 +59,14 @@ class LoadNC():
     def findCoor(self,latnc, lonnc, latp, lonp):
         """Retorna un serie de tiempo desde el netcdf dada un latitud y longitug"""
         print(latp," ", lonp)
-        latncmx = np.where(latnc >= latp)
-        mx=len(latncmx[0])
-        latncb =[latnc[mx-1],latnc[mx],latnc[mx+1],latnc[mx+2]]
-        print("valores ",latncb)
+        ncmx = np.where(latnc >= latp)
+        mx=len(ncmx[0])
+        latncb =[latnc[mx],latnc[mx+1]]
+        print("latitudes ", latncb)
+        ncmx = np.where(lonnc <= lonp)
+        mx = len(ncmx[0])
+        lonncb = [lonnc[mx-1], lonnc[mx]]
+        print("longitudes ",lonncb)
 
 
 
