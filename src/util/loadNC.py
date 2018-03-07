@@ -57,7 +57,7 @@ class LoadNC():
 
     def findCoor(self):
         """Obtiene las cordenadas dentro del dataset NetCDF que sean las mas cooerentes """
-        pass
+
 
     def getDataAsfile(self, varible, lat, lon):
 
