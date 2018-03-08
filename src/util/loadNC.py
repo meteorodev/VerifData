@@ -2,17 +2,13 @@
 #Autor: Darwin Rosero Vaca
 
 """Descripción: genera archivos de datos en base a dataset de netcdf
-
 descarga de datos modo experto
-
   SOURCES .UCSB .CHIRPS .v2p0 .monthly .global .precipitation
   X (82W) (74W) RANGEEDGES
   Y (3N) (6S) RANGEEDGES
   T (Jan 1981) (Feb 2018) RANGEEDGES
 link de descarga
-
 https://iridl.ldeo.columbia.edu/SOURCES/.UCSB/.CHIRPS/.v2p0/.monthly/.global/.precipitation/X/%2881.5W%29%2874E%29RANGEEDGES/T/%28Jan%201981%29%28Jan%202017%29RANGEEDGES/Y/%283N%29%286S%29RANGEEDGES/X/%2881.5W%29%2874w%29RANGEEDGES/data.nc
-
 """
 
 import numpy as np
@@ -30,10 +26,10 @@ class LoadNC():
 
         dataset=nc.Dataset("/home/drosero/Descargas/rrchirps.nc")
         #print("leyendo el netcdf\n imprimiendo el metadato")
-        #print(dataset.file_format)
-        #print(dataset.dimensions.keys())
+        print(dataset.file_format)
+        print(dataset.dimensions.keys())
         #print(dataset.dimensions['T'])
-        #print(dataset.variables.keys())
+        print(dataset.variables.keys())
         #print(dataset.variables['precipitation'])
         #print(dataset.variables)
         """longitud = X, latitud = Y Precipitacion = precipitation"""
@@ -50,13 +46,30 @@ class LoadNC():
         ##time serie
         fechas = pd.date_range(start="1981-01-01",periods=len(dataset.variables['T']),freq="MS")
         print(type(fechas),"  ",type(rr))
-
+        print("tipo de datos ", type(lon))
+        self.findCoor(lat,lon,lonp=-78.17830278,latp=0.1783027778)
         self.getDataAsfile(rr, lat, lon)
         dataset.close();
 
 
-    def findCoor(self):
-        """Obtiene las cordenadas dentro del dataset NetCDF que sean las mas cooerentes """
+    def findCoor(self,latnc, lonnc, latp, lonp):
+        """Retorna un serie de tiempo desde el netcdf dada un latitud y longitug"""
+        print(latp," ", lonp)
+        ncmx = np.where(latnc >= latp)
+        mx=len(ncmx[0])
+        latncb =[latnc[mx],latnc[mx+1]]
+        print("latitudes ", latncb)
+        ncmx = np.where(lonnc <= lonp)
+        mx = len(ncmx[0])
+        lonncb = [lonnc[mx-1], lonnc[mx]]
+        # A CUAL CORDENADA ESTA MAS PROXIMO EL PUNTO
+        # ENTONCES  x >= lonnc
+        # y >= latnc
+        print("longitudes ",lonncb)
+
+
+
+
 
 
     def getDataAsfile(self, varible, lat, lon):
@@ -88,6 +101,9 @@ class LoadNC():
         dataF.to_csv("/home/drosero/Escritorio/chirps.csv",sep=";")
         ##datos=pd.DataFrame(sLat,sLon,v1,v2,v3,v4,v5)
 
+
+lonp=78.17830278
+latp=0.1783027778
 
 lnc= LoadNC()
 lnc.readNc()
