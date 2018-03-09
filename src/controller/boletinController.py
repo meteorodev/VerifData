@@ -151,11 +151,11 @@ class BoletinController():
 #rs = "/media/drosero/Datos/INAMHI/2018/Información/CIFFEN/"
 rs = "/home/drosero/Escritorio/"
 bc= BoletinController()
-listado = bc.estaBol
+#listado = bc.estaBol
 
 ##Para precipitacion
-rdbf = "/home/drosero/Documentos/Boletin/2018/BASES/T0001.DBF"
-listado=["M0103","M0002","M0258","M0006","M0024","M1094","M0025"]
+#rdbf = "/home/drosero/Documentos/Boletin/2018/BASES/T0001.DBF"
+#listado=["M0103","M0002","M0258","M0006","M0024","M1094","M0025"]
 #nc=bc.normalMensual(1981,2010,listado,rdbf,tabla="V0001")
 #nc.to_csv((rs+"RRNormal"), sep=';', encoding='utf-8')
 #vc=bc.getVariacionMensual([2017], nc, tabla="V0001")
@@ -163,10 +163,10 @@ listado=["M0103","M0002","M0258","M0006","M0024","M1094","M0025"]
 
 
 ##Para Temperatura maxima
-rdbf = "/home/drosero/Documentos/Boletin/2018/BASES/T0011.DBF"
+#rdbf = "/home/drosero/Documentos/Boletin/2018/BASES/T0011.DBF"
 
-nc=bc.normalMensual(1981,2010,listado,rdbf,tabla="V0008")
-nc.to_csv((rs+"TMedNormal"), sep=';', encoding='utf-8')
+#nc=bc.normalMensual(1981,2010,listado,rdbf,tabla="V0008")
+#nc.to_csv((rs+"TMedNormal"), sep=';', encoding='utf-8')
 ##vc=bc.getVariacionMensual([2017], nc, tabla="V0008",agregada=False)
 ##vc.to_csv((rs+"TmaxVaria"), sep=';', encoding='utf-8')
 
@@ -191,3 +191,34 @@ print("##########Normal calculada ##########\n",
       "#####################################\n",nc,sep="")
 print("##########variacion calculada ##########\n",
       "#####################################\n",vc,sep="")"""
+
+
+########estaciones de pedro mocayo
+
+listado=["M0001", "M0009", "M0021", "M0023", "M0024", "M0105", "M0310", "M0318", "M0321", "M0328", "M0337", "M0343", "M0344",
+             "M0345", "M0346", "M0357", "M0358", "M0359", "M0909", "M0910", "M1094", "M1183", "M1240", "M5021", "M5044", "M0010",
+             "M0011", "M0022", "M0053", "M0055", "M0098", "M0108", "M0109", "M0110", "M0111", "M0115", "M0210", "M0211", "M0214",
+             "M0264", "M0265", "M0267", "M0282", "M0285", "M0299", "M0316", "M0317", "M0319", "M0320", "M0322", "M0323", "M0329",
+             "M0330", "M0331", "M0332", "M0333", "M0334", "M0338", "M0341", "M0342", "M0347", "M0356", "M0525", "M0526", "M0561",
+             "M0566", "M0572", "M0573", "M0574", "M0604", "M0605", "M0618", "M0628", "M0701", "M0705", "M0714", "M0734", "M0833",
+             "M0834", "M0872", "M0873", "M0874", "M0875", "M0880", "M0886", "M0911", "M0912", "M0913", "M0915", "M0939", "M0940",
+             "M0941", "M0942", "M0943", "M0944", "M0945", "M0946", "M0947", "M0948", "M0949", "M0950", "M0951", "M0952", "M0953",
+             "M0954", "M0955", "M0956", "M0957", "M1002", "M1012", "M1016", "M1017", "M1056", "M1057", "M1061", "M1200", "M1211",
+             "M5003", "M5031", "M5035", "M5036", "M5037", "M5042", "M5043", "M5054", "M5055", "M5074", "M5088", "M5104", "M1156",
+             "M1002", "M1016"]
+
+
+rdbf = "/home/drosero/Documentos/Boletin/2018/BASES/T0011.DBF"
+rs = "/home/drosero/Escritorio/chirps/"
+nc=bc.normalMensual(1981,2010,listado,rdbf,tabla="V0011")
+nc.to_csv((rs+"TmaxNormal.csv"), sep=';', encoding='utf-8')
+#vc=bc.getVariacionMensual(list(range(1981,2018)), nc, tabla="V0011",agregada=False)
+#vc.to_csv((rs+"TmaxVaria.csv"), sep=';', encoding='utf-8')
+
+##Para Temperatura minima
+rdbf = "/home/drosero/Documentos/Boletin/2018/BASES/T0012.DBF"
+
+nc=bc.normalMensual(1981,2010,listado,rdbf,tabla="V0012")
+nc.to_csv((rs+"TminNormal.csv"), sep=';', encoding='utf-8')
+#vc=bc.getVariacionMensual(list(range(1981,2018)), nc, tabla="V0012",agregada=False)
+#vc.to_csv((rs+"TminVaria.csv"), sep=';', encoding='utf-8')

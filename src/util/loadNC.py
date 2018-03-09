@@ -68,11 +68,11 @@ class LoadNC():
     def findCoor(self,latnc, lonnc, latp, lonp):
         """Retorna un serie de tiempo desde el netcdf dada un latitud y longitug"""
 
-        print(latp," metodo findCoor ", lonp)
+        #print(latp," metodo findCoor ", lonp)
         ncmx = np.where(latnc >= latp)
         mx=len(ncmx[0])
         latncb =[latnc[mx-1],latnc[mx]]
-        print("latitudes ", latncb)
+        #print("latitudes ", latncb)
         a = abs(latncb[0]) - abs(latp)
         b = abs(latp) - abs(latncb[1])
         corfin=[]
@@ -100,8 +100,8 @@ class LoadNC():
         # A CUAL CORDENADA ESTA MAS PROXIMO EL PUNTO
         # ENTONCES  x >= lonnc
         # y >= latnc
-        print("longitudes ",lonncb)
-        print("############################################")
+        #print("longitudes ",lonncb)
+        #print("############################################")
         return {"coor":corfin,"pos":pos}
 
     def getDataAsfile(self, varible, lat, lon):
