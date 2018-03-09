@@ -14,6 +14,7 @@ link de descarga
 https://iridl.ldeo.columbia.edu/SOURCES/.UCSB/.CHIRPS/.v2p0/.monthly/.global/.precipitation/X/%2881.5W%29%2874E%29RANGEEDGES/T/%28Jan%201981%29%28Jan%202017%29RANGEEDGES/Y/%283N%29%286S%29RANGEEDGES/X/%2881.5W%29%2874w%29RANGEEDGES/data.nc
 
 """
+from _threading_local import local
 
 import numpy as np
 import netCDF4 as nc
@@ -26,14 +27,14 @@ class LoadNC():
 
     def __init__(self,):
         """Constructor for LoadNC"""
-    def readNc(self, rutaNC,añoIn):
+    def readNc(self, rutaNC,añoIn, latEst,lonEst,varnc):
 
         dataset=nc.Dataset(rutaNC)
         #print("leyendo el netcdf\n imprimiendo el metadato")
-        print(dataset.file_format)
-        print(dataset.dimensions.keys())
+        #print(dataset.file_format)
+        #print(dataset.dimensions.keys())
         #print(dataset.dimensions['T'])
-        print(dataset.variables.keys())
+        #print(dataset.variables.keys())
         #print(dataset.variables['precipitation'])
         #print(dataset.variables)
         """longitud = X, latitud = Y Precipitacion = precipitation"""
@@ -50,27 +51,24 @@ class LoadNC():
         ##time serie
         cadena = str(añoIn)+"-01-01"
         fechas = pd.date_range(start=cadena,periods=len(dataset.variables['T']),freq="MS")
-        print(fechas)
-        print("tipo de datos ", type(lon))
-        cordNC = self.findCoor(lat,lon,lonp=-78.17830278,latp=0.1783027778)
-        print(cordNC.items())
+        #print(fechas)
+        #print("tipo de datos ", type(lon))
+        #cordNC = self.findCoor(lat,lon,lonp=-78.17830278,latp=0.1783027778)
+        cordNC = self.findCoor(lat, lon, latEst,lonEst)
+        #print(cordNC.items())
         print("coordenadas encontradas  ==> ",cordNC["coor"], " posiciones ==> ", cordNC["pos"])
         #get all values for this lat and lon
-        rr=dataset.variables["precipitation"][:,cordNC["pos"][0],cordNC["pos"][1]]
-        print("rr length ",len(rr),"\n valores de RR \n",rr)
+        rr=dataset.variables[varnc][:,cordNC["pos"][0],cordNC["pos"][1]]
+        #print("rr length ",len(rr),"\n valores de RR \n",rr)
         #self.getDataAsfile(rr, lat, lon)
-        valores=pd.Series(rr,index=fechas)
-
-
-        dataset.close();
-
-        return valores
+        data={"fecha":fechas,"valor":rr}
+        return pd.DataFrame(data)
 
 
     def findCoor(self,latnc, lonnc, latp, lonp):
         """Retorna un serie de tiempo desde el netcdf dada un latitud y longitug"""
 
-        print(latp," ", lonp)
+        print(latp," metodo findCoor ", lonp)
         ncmx = np.where(latnc >= latp)
         mx=len(ncmx[0])
         latncb =[latnc[mx-1],latnc[mx]]
@@ -85,7 +83,10 @@ class LoadNC():
         else:
             corfin.append(latncb[0])
             pos.append(mx-1)
+        #print("********************************")
+        #print(lonnc)
         ncmx = np.where(lonnc <= lonp)
+        #print(lonnc[ncmx])
         mx = len(ncmx[0])
         lonncb = [lonnc[mx-1], lonnc[mx]]
         a = abs(lonncb[0]) - abs(lonp)
@@ -102,9 +103,6 @@ class LoadNC():
         print("longitudes ",lonncb)
         print("############################################")
         return {"coor":corfin,"pos":pos}
-
-
-
 
     def getDataAsfile(self, varible, lat, lon):
 
@@ -132,11 +130,12 @@ class LoadNC():
         #data={"lon":sLon,"lat":sLat,"1981-01":v1,"1981-02":v2,"1981-03":v3,"1981-04":v4,"1981-05":v5}
         dataF=pd.DataFrame({"lon":sLon,"lat":sLat,"1981-01":v1,"1981-02":v2,"1981-03":v3,"1981-04":v4,"1981-05":v5})
         dataF.to_csv("/home/darwin/Escritorio/chirps.csv",sep=";")
-        ##datos=pd.DataFrame(sLat,sLon,v1,v2,v3,v4,v5)
+        ##datos=pd.DataFrame(sLat,sLon,v1,v2,v3,v4,v5
 
 
-lonp=78.17830278
-latp=0.1783027778
 
-lnc= LoadNC()
-print(lnc.readNc("/home/darwin/Descargas/rrchirps.nc",1981))
+#lonEst= -78.17830278
+#latEst=0.1783027778
+
+#lnc= LoadNC()
+#print(lnc.readNc("/home/drosero/Descargas/rrchirps.nc",1981,latEst, lonEst,"precipitation"))
