@@ -49,7 +49,7 @@ class configDB:
         # Open a file
         ruta = ruta+".cnf"
         fo = open(ruta, "w")
-        datos="database=mch\nhost=192.168.1.39\nuser=drosero\npassword=darwin"
+        datos="database=dbname\nhost=192.168.1.1\nuser=user\npassword=password"
         fo.write(datos)
 
         # Close opend file
